@@ -1,5 +1,8 @@
 const controle = document.querySelectorAll("[data-controle]");
 const estatisticas = document.querySelectorAll("[data-estatistica]");
+const robo = document.querySelector("[data-robo]");
+let counter = 1;
+
 const pecas = {
     bracos: {
         forca: 29,
@@ -33,13 +36,14 @@ const pecas = {
         velocidade: -2,
     },
 };
-
-controle.forEach((elemento) => {
-    elemento.addEventListener("click", (evento) => {
-        manipulaDados(evento.target.dataset.controle, evento.target.parentNode);
-        atualizaEstatisticas(evento.target.dataset.peca, evento.target.dataset.controle);
-    });
-});
+const listaCores = [
+    "img/preto.png",
+    "img/branco.png",
+    "img/amarelo.png",
+    "img/rosa.png",
+    "img/azul.png",
+    "img/vermelho.png",
+];
 
 function manipulaDados(operacao, controle) {
     const peca = controle.querySelector("[data-contador]");
@@ -54,11 +58,40 @@ function manipulaDados(operacao, controle) {
 function atualizaEstatisticas(peca, operacao) {
     if (operacao === "+") {
         estatisticas.forEach((elemento) => {
-            elemento.textContent = parseInt(elemento.textContent) + pecas[peca][elemento.dataset.estatistica];
+            elemento.textContent =
+                parseInt(elemento.textContent) +
+                pecas[peca][elemento.dataset.estatistica];
         });
     } else {
         estatisticas.forEach((elemento) => {
-            elemento.textContent = parseInt(elemento.textContent) - pecas[peca][elemento.dataset.estatistica];
+            elemento.textContent =
+                parseInt(elemento.textContent) -
+                pecas[peca][elemento.dataset.estatistica];
         });
     }
 }
+
+function alteraCor(cores) {
+    if (counter === cores.length) {
+        counter = 0;
+    }
+
+    robo.setAttribute("src", cores[counter]);
+    counter++;
+}
+
+robo.addEventListener("click", () => {
+    alteraCor(listaCores);
+});
+
+
+controle.forEach((elemento) => {
+    elemento.addEventListener("click", (evento) => {
+        manipulaDados(evento.target.dataset.controle, evento.target.parentNode);
+        atualizaEstatisticas(
+            evento.target.dataset.peca,
+            evento.target.dataset.controle
+        );
+    });
+});
+
